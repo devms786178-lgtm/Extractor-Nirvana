@@ -5,17 +5,6 @@ from config import API_ID, API_HASH, BOT_TOKEN
 import os
 import sys
 
-# Create base directory for all data
-BASE_DIR = os.path.join(os.path.expanduser("~"), ".extractor_bot")
-SESSION_DIR = os.path.join(BASE_DIR, "sessions")
-
-# Ensure directories exist with proper permissions
-try:
-    os.makedirs(SESSION_DIR, mode=0o700, exist_ok=True)
-except Exception as e:
-    print(f"Error creating directories: {e}")
-    sys.exit(1)
-
 # Configure logging
 logging.basicConfig(
     format="[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s",
@@ -27,16 +16,20 @@ logger = logging.getLogger(__name__)
 # Initialize event loop
 loop = asyncio.get_event_loop()
 
-# Initialize Pyrogram client with proper session path
-# NOTE: max_retries is NOT a valid Client() argument in pyrofork - removed
+# Use in_memory=True — no session file saved to disk.
+# This avoids FLOOD_WAIT (auth.ImportBotAuthorization) on every Render restart
+# because Render's filesystem is ephemeral (resets on each deploy/restart).
+# With in_memory, Pyrogram does NOT re-import the bot auth from scratch each time;
+# it skips writing/reading session files entirely, preventing repeated auth calls.
 try:
     app = Client(
-        os.path.join(SESSION_DIR, "extractor_bot"),
+        name="extractor_bot",
         api_id=API_ID,
         api_hash=API_HASH,
         bot_token=BOT_TOKEN,
         sleep_threshold=120,
-        workers=500
+        workers=500,
+        in_memory=True
     )
 except Exception as e:
     logger.error(f"Failed to initialize client: {e}")
