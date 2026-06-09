@@ -13,7 +13,7 @@ OWNER_ID = 7438818824  # <-- Replace with your Telegram user ID
 
 log_channel = CHANNEL_ID
 # MongoDB setup
-mongo = MongoClient("")
+mongo = MongoClient("mongodb+srv://developerbro723_db_user:9axC7c7iQm0G3ESO@cluster0.dr8m75m.mongodb.net/?appName=Cluster0")
 db = mongo["yourbotdb"]
 auth_collection = db["auth_users"]
 
