@@ -1,9 +1,9 @@
 import os
 from os import getenv
 # ---------------R---------------------------------
-API_ID = int(os.environ.get("API_ID", "33853339"))
+API_ID = int(os.environ.get("API_ID", "38498066"))
 # ------------------------------------------------
-API_HASH = os.environ.get("API_HASH", "d44e3a158d9da849df318173268f94c0")
+API_HASH = os.environ.get("API_HASH", "c9696114751feacdeb1b4487f5839a1a")
 # ----------------D--------------------------------
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
 # -----------------A-------------------------------
