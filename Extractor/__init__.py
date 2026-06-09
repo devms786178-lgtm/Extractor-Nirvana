@@ -28,6 +28,7 @@ logger = logging.getLogger(__name__)
 loop = asyncio.get_event_loop()
 
 # Initialize Pyrogram client with proper session path
+# NOTE: max_retries is NOT a valid Client() argument in pyrofork - removed
 try:
     app = Client(
         os.path.join(SESSION_DIR, "extractor_bot"),
@@ -52,10 +53,10 @@ async def info_bot():
             BOT_NAME = getme.first_name + " " + getme.last_name
         else:
             BOT_NAME = getme.first_name
+        logger.info(f"Bot started: @{BOT_USERNAME}")
     except Exception as e:
         logger.error(f"Failed to start bot: {e}")
         sys.exit(1)
 
 # Run the bot
 loop.run_until_complete(info_bot())
-
