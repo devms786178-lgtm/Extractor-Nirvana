@@ -40,7 +40,7 @@ async def pw_login(app, message):
             
             await app.send_message(message.chat.id, "🔄 **Sending OTP... Please wait!**")
             otp_response = requests.post(
-                "https://api.penpencil.co/v1/users/get-otp?smsType=0", 
+                "https://api.penpencil.co/v2/users/get-otp?smsType=0", 
                 headers=headers, 
                 json=payload
             ).json()
@@ -66,7 +66,7 @@ async def pw_login(app, message):
             
             await app.send_message(message.chat.id, "🔄 **Verifying OTP... Please wait!**")
             token_response = requests.post(
-                "https://api.penpencil.co/v3/oauth/token", 
+                "https://api.penpencil.co/v2/oauth/token", 
                 data=token_payload
             ).json()
             
@@ -96,7 +96,7 @@ async def pw_login(app, message):
         }
         
         batch_response = requests.get(
-            "https://api.penpencil.co/v3/batches/my-batches?mode=1&amount=paid&page=1", 
+            "https://api.penpencil.co/v2/batches/my-batches?mode=1&amount=paid&page=1", 
             headers=headers
         ).json()
         
@@ -136,7 +136,7 @@ async def pw_login(app, message):
             text=f"🕵️ **Fetching details for Batch:** **{batch_name}**... Please wait!"
         )
         course_response = requests.get(
-            f"https://api.penpencil.co/v3/batches/{target_id}/details", 
+            f"https://api.penpencil.co/v2/batches/{target_id}/details", 
             headers=headers
         ).json()
         
