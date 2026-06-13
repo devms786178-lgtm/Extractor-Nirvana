@@ -672,7 +672,7 @@ async def pw_login(app, message):
 
             await app.send_message(message.chat.id, "🔄 **Sending OTP... Please wait!**")
             otp_response = requests.post(
-                "https://api.penpencil.co/v2/users/get-otp?smsType=0",
+                "https://api.penpencil.co/v1/users/get-otp?smsType=0",
                 headers=headers,
                 json=payload
             ).json()
@@ -698,7 +698,7 @@ async def pw_login(app, message):
 
             await app.send_message(message.chat.id, "🔄 **Verifying OTP... Please wait!**")
             token_response = requests.post(
-                "https://api.penpencil.co/v2/oauth/token",
+                "https://api.penpencil.co/v3/oauth/token",
                 data=token_payload
             ).json()
 
