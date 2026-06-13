@@ -115,7 +115,7 @@ def fetch_content_with_details(batch_id, subject_id, topic_id, headers, content_
     try:
         page = 1
         while page <= 15:  # safety limit
-            url = f"https://api.penpencil.co/v2/batches/{batch_id}/subject/{subject_id}/contents"
+            url = f"https://api.penpencil.co/v3/batches/{batch_id}/subject/{subject_id}/contents"
             params = {
                 "tag": topic_id,
                 "contentType": content_type,
@@ -134,7 +134,7 @@ def fetch_content_with_details(batch_id, subject_id, topic_id, headers, content_
                 topic = item.get("topic", "Unknown").replace(":", "_").replace("/", "-")
 
                 # Get schedule-details for proper video URL
-                detail_url = f"https://api.penpencil.co/v2/batches/{batch_id}/subject/{subject_id}/schedule/{schedule_id}/schedule-details"
+                detail_url = f"https://api.penpencil.co/v3/batches/{batch_id}/subject/{subject_id}/schedule/{schedule_id}/schedule-details"
                 try:
                     detail_resp = requests.get(detail_url, headers=headers, timeout=30)
                     if detail_resp.status_code == 200:
@@ -198,7 +198,7 @@ def fetch_today_schedule(batch_id, target_date, headers):
         end_epoch = int(end_dt.timestamp() * 1000)
 
         # Try v2 schedule endpoint with proper date range
-        url = f"https://api.penpencil.co/v2/batches/{batch_id}/schedule"
+        url = f"https://api.penpencil.co/v3/batches/{batch_id}/schedule"
         params = {
             "startDate": start_epoch,
             "endDate": end_epoch,
@@ -215,7 +215,7 @@ def fetch_today_schedule(batch_id, target_date, headers):
 
         # Also try batch-contents as fallback
         if not all_schedules:
-            url2 = f"https://api.penpencil.co/v2/batches/{batch_id}/batch-contents"
+            url2 = f"https://api.penpencil.co/v3/batches/{batch_id}/batch-contents"
             params2 = {
                 "startDate": start_epoch,
                 "endDate": end_epoch,
@@ -249,7 +249,7 @@ def fetch_today_schedule(batch_id, target_date, headers):
 def process_today_class(batch_id, batch_name, target_date, headers, bot_link):
     """Process Today's Class extraction - fetch scheduled content for target date"""
     # Get batch details to find subjects
-    detail_url = f"https://api.penpencil.co/v2/batches/{batch_id}/details"
+    detail_url = f"https://api.penpencil.co/v3/batches/{batch_id}/details"
     batch_resp = requests.get(detail_url, headers=headers, timeout=30).json()
 
     if not batch_resp or not batch_resp.get("success"):
@@ -320,7 +320,7 @@ def process_today_class(batch_id, batch_name, target_date, headers, bot_link):
         notes_lines = []
 
         if subject_id and schedule_id:
-            detail_url = f"https://api.penpencil.co/v2/batches/{batch_id}/subject/{subject_id}/schedule/{schedule_id}/schedule-details"
+            detail_url = f"https://api.penpencil.co/v3/batches/{batch_id}/subject/{subject_id}/schedule/{schedule_id}/schedule-details"
             try:
                 detail_resp = requests.get(detail_url, headers=headers, timeout=30)
                 if detail_resp.status_code == 200:
@@ -722,7 +722,7 @@ async def pw_login(app, message):
 
         # FIXED: Use all-purchased-batches endpoint instead of my-batches
         batch_response = requests.get(
-            "https://api.penpencil.co/v2/batches/all-purchased-batches?mode=1&amount=paid&page=1",
+            "https://api.penpencil.co/v3/batches/all-purchased-batches?mode=1&amount=paid&page=1",
             headers=headers
         ).json()
 
@@ -770,7 +770,7 @@ async def pw_login(app, message):
 
         # Fetch batch details for expiry date
         course_response = requests.get(
-            f"https://api.penpencil.co/v2/batches/{target_id}/details",
+            f"https://api.penpencil.co/v3/batches/{target_id}/details",
             headers=headers
         ).json()
 
@@ -903,7 +903,7 @@ async def pw_login(app, message):
                     chapters = []
                     for page in range(1, 15):
                         topic_resp = requests.get(
-                            f"https://api.penpencil.co/v2/batches/{target_id}/subject/{si}/topics?page={page}",
+                            f"https://api.penpencil.co/v3/batches/{target_id}/subject/{si}/topics?page={page}",
                             headers=headers
                         ).json()
                         if topic_resp and topic_resp.get("data"):
